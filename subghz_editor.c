@@ -102,10 +102,46 @@ int32_t subghz_editor_app(void* p) {
     FURI_LOG_I(TAG, "Starting SubGhz Editor, args: %s", p ? (const char*)p : "none");
     SubGhzEditorApp* app = subghz_editor_app_alloc();
 
-    // Check if path passed as argument (e.g. opened from Archive / File Manager)
     if(p && strlen((const char*)p) > 0) {
-        FURI_LOG_I(TAG, "Auto-opening file from arguments: %s", (const char*)p);
-        subghz_editor_file_load(app, (const char*)p);
+        FURI_LOG_I(TAG, "Loading file from launch argument: %s", (const char*)p);
+        if(!subghz_editor_file_load(app, (const char*)p)) {
+            subghz_editor_show_message(app, "Error", "Failed to load .sub file");
+            view_dispatcher_run(app->view_dispatcher);
+            subghz_editor_app_free(app);
+            return 0;
+        }
+        subghz_editor_view_refresh_list(app);
+    } else {
+        // No launch argument: directly open file browser dialog
+        FURI_LOG_I(TAG, "No file argument provided, opening file browser dialog");
+        DialogsFileBrowserOptions browser_options;
+        dialog_file_browser_set_basic_options(
+            &browser_options,
+            SUBGHZ_EDITOR_APP_EXTENSION,
+            NULL);
+        browser_options.base_path = SUBGHZ_EDITOR_APP_PATH_FOLDER;
+        browser_options.hide_ext = false;
+
+        FuriString* preselected_path = furi_string_alloc_set(SUBGHZ_EDITOR_APP_PATH_FOLDER);
+        bool chosen = dialog_file_browser_show(
+            app->dialogs,
+            app->model.file_path,
+            preselected_path,
+            &browser_options);
+        furi_string_free(preselected_path);
+
+        if(!chosen) {
+            FURI_LOG_I(TAG, "File selection cancelled, exiting application");
+            subghz_editor_app_free(app);
+            return 0;
+        }
+
+        if(!subghz_editor_file_load(app, furi_string_get_cstr(app->model.file_path))) {
+            subghz_editor_show_message(app, "Error", "Failed to load .sub file");
+            view_dispatcher_run(app->view_dispatcher);
+            subghz_editor_app_free(app);
+            return 0;
+        }
         subghz_editor_view_refresh_list(app);
     }
 
