@@ -2,6 +2,8 @@
 #include "subghz_editor_file.h"
 #include "subghz_editor_view.h"
 
+#define TAG "SubGhzEditorApp"
+
 static uint32_t subghz_editor_nav_back_to_list(void* context) {
     UNUSED(context);
     return SubGhzEditorViewVariableList;
@@ -12,10 +14,18 @@ static uint32_t subghz_editor_nav_exit(void* context) {
     return VIEW_NONE;
 }
 
+static bool subghz_editor_navigation_callback(void* context) {
+    SubGhzEditorApp* app = (SubGhzEditorApp*)context;
+    FURI_LOG_I(TAG, "Navigation event (back), exiting app");
+    view_dispatcher_stop(app->view_dispatcher);
+    return true;
+}
+
 static SubGhzEditorApp* subghz_editor_app_alloc(void) {
     SubGhzEditorApp* app = malloc(sizeof(SubGhzEditorApp));
     memset(app, 0, sizeof(SubGhzEditorApp));
 
+    FURI_LOG_I(TAG, "Allocating SubGhzEditorApp resources");
     subghz_editor_model_init(&app->model);
 
     // Open Records
@@ -30,6 +40,12 @@ static SubGhzEditorApp* subghz_editor_app_alloc(void) {
         app->view_dispatcher,
         app->gui,
         ViewDispatcherTypeFullscreen);
+
+    view_dispatcher_set_event_callback_context(app->view_dispatcher, app);
+    view_dispatcher_set_custom_event_callback(
+        app->view_dispatcher, subghz_editor_custom_event_callback);
+    view_dispatcher_set_navigation_event_callback(
+        app->view_dispatcher, subghz_editor_navigation_callback);
 
     app->var_list = variable_item_list_alloc();
     View* var_list_view = variable_item_list_get_view(app->var_list);
@@ -61,6 +77,7 @@ static SubGhzEditorApp* subghz_editor_app_alloc(void) {
 }
 
 static void subghz_editor_app_free(SubGhzEditorApp* app) {
+    FURI_LOG_I(TAG, "Freeing SubGhzEditorApp resources");
     // Remove views
     view_dispatcher_remove_view(app->view_dispatcher, SubGhzEditorViewVariableList);
     view_dispatcher_remove_view(app->view_dispatcher, SubGhzEditorViewTextInput);
@@ -82,11 +99,12 @@ static void subghz_editor_app_free(SubGhzEditorApp* app) {
 }
 
 int32_t subghz_editor_app(void* p) {
-    UNUSED(p);
+    FURI_LOG_I(TAG, "Starting SubGhz Editor, args: %s", p ? (const char*)p : "none");
     SubGhzEditorApp* app = subghz_editor_app_alloc();
 
     // Check if path passed as argument (e.g. opened from Archive / File Manager)
     if(p && strlen((const char*)p) > 0) {
+        FURI_LOG_I(TAG, "Auto-opening file from arguments: %s", (const char*)p);
         subghz_editor_file_load(app, (const char*)p);
         subghz_editor_view_refresh_list(app);
     }
@@ -95,5 +113,6 @@ int32_t subghz_editor_app(void* p) {
     view_dispatcher_run(app->view_dispatcher);
 
     subghz_editor_app_free(app);
+    FURI_LOG_I(TAG, "SubGhz Editor terminated cleanly");
     return 0;
 }
