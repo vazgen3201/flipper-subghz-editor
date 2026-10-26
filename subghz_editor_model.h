@@ -40,6 +40,14 @@ static const SubGhzFreqPreset subghz_presets[] = {
 
 #define SUBGHZ_PRESETS_COUNT (sizeof(subghz_presets) / sizeof(SubGhzFreqPreset))
 
+typedef enum {
+    SubGhzEditorEventOpenFile = 100,
+    SubGhzEditorEventAbout,
+    SubGhzEditorEventSaveOverwrite,
+    SubGhzEditorEventSaveCopy,
+    SubGhzEditorEventCloseFile,
+} SubGhzEditorCustomEvent;
+
 typedef struct {
     FuriString* file_path;
     FuriString* file_name;
