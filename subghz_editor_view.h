@@ -1,0 +1,7 @@
+#pragma once
+
+#include "subghz_editor_model.h"
+
+void subghz_editor_view_init(SubGhzEditorApp* app);
+void subghz_editor_view_refresh_list(SubGhzEditorApp* app);
+void subghz_editor_show_message(SubGhzEditorApp* app, const char* title, const char* msg);
