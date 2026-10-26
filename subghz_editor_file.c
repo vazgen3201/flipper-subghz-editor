@@ -17,6 +17,7 @@ void subghz_editor_model_reset(SubGhzEditorModel* model) {
     furi_string_reset(model->preset_str);
     memset(model->key_buf, 0, sizeof(model->key_buf));
     memset(model->temp_key_buf, 0, sizeof(model->temp_key_buf));
+    memset(model->freq_input_buf, 0, sizeof(model->freq_input_buf));
     memset(model->custom_freq_str, 0, sizeof(model->custom_freq_str));
     model->frequency = 433920000;
     model->initial_frequency = 433920000;
