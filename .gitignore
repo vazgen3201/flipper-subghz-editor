@@ -1,0 +1,9 @@
+.ufbt/
+build/
+dist/
+*.fap
+*.elf
+*.bin
+*.map
+.vscode/
+.idea/
