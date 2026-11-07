@@ -2,7 +2,7 @@ sourcecode:
   type: git
   location:
     origin: https://github.com/vazgen3201/flipper-subghz-editor.git
-    commit_sha: 2ab112738001376073729ab3ea4b001b7f834163
+    commit_sha: 61ca05a667d1242d4533fba318b0d9d8b7e78895
 description: "@docs/catalog-description.md"
 changelog: "@changelog.md"
 author: "Vazgen Grigoryan"
