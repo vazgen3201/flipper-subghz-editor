@@ -2,11 +2,11 @@
 
 Sub-GHz file frequency and transmission key code editor for Flipper Zero.
 
-Open any captured or saved Sub-GHz `.sub` file directly on your Flipper Zero, adjust frequency to standard regional presets or set a custom frequency, edit the hex key payload, and save changes in place or to a separate backup file.
+Open any captured or saved Sub-GHz .sub file directly on your Flipper Zero, adjust frequency to standard regional presets or set a custom frequency, edit the hex key payload, and save changes in place or to a separate backup file.
 
 ## Features
 
-- Native File Browser: Browse and open any `.sub` file stored on SD card (/ext/subghz).
+- Native File Browser: Browse and open any .sub file stored on SD card (/ext/subghz).
 - Standard Presets: Quick cycling between common frequencies (315.00 MHz, 433.07 MHz, 433.88 MHz, 433.92 MHz, 868.35 MHz, 915.00 MHz, and more).
 - Custom Frequency Input: Enter exact target frequency with automatic hardware band validation (300-348 MHz, 387-464 MHz, 779-928 MHz).
 - HEX Key Editor: Direct interactive hexadecimal editor for protocol payload keys.
