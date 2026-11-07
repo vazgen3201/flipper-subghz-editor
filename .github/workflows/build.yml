@@ -12,13 +12,17 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  ufbt-build:
     runs-on: ubuntu-latest
-    name: 'Build .fap with ufbt (${{ matrix.sdk-channel }})'
     strategy:
       fail-fast: false
       matrix:
-        sdk-channel: [release, dev]
+        include:
+          - name: dev channel
+            sdk-channel: dev
+          - name: release channel
+            sdk-channel: release
+    name: 'ufbt: Build for ${{ matrix.name }}'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
