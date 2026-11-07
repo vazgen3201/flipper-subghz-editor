@@ -291,7 +291,7 @@ bool subghz_editor_custom_event_callback(void* context, uint32_t event) {
         FURI_LOG_I(TAG, "Showing About screen");
         subghz_editor_show_message(
             app,
-            "Sub-GHz Editor v1.0",
+            "Sub-GHz Editor v1.1",
             "1. Open saved .sub\n2. Cycle freq or press OK to edit\n3. Edit Key in HEX\n4. Save copy or overwrite\n\nBy Vazgen Grigoryan");
         return true;
     }
