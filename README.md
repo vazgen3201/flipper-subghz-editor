@@ -1,50 +1,112 @@
 # Sub-GHz Editor for Flipper Zero
 
-A modular, native Flipper Zero application (`.fap`) to open saved Sub-GHz `.sub` files, adjust frequency using standard presets (including 433.88 MHz, 433.92 MHz, 315.00 MHz, 868.35 MHz, 915.00 MHz), edit key codes in HEX, and save modifications either by overwriting or creating a new copy.
+<p align="center">
+  <img src="assets/subghz_editor_logo.png" alt="Sub-GHz Editor Logo" width="120" /><br>
+  <b>Sub-GHz File Frequency and Key Code Payload Editor</b><br>
+  <i>Inspect • Adjust Frequency Presets • Manual Frequency Input • Hex Key Payload Editing</i>
+</p>
 
-## Features
+<p align="center">
+  <img src="screenshots/ui_screen.png" alt="Sub-GHz Editor UI Screen" width="380" />
+  <img src="screenshots/about_screen.png" alt="Sub-GHz Editor About Screen" width="380" />
+</p>
 
-- **File Browser Integration**: Easily browse and pick any `.sub` file stored on SD card (`/ext/subghz`).
-- **Standard Frequency Presets**: Quick cycling between common Sub-GHz frequencies:
-  - 315.00 MHz
-  - 318.00 MHz
-  - 345.00 MHz
-  - 390.00 MHz
-  - 433.07 MHz
-  - 433.88 MHz
-  - 433.92 MHz
-  - 434.42 MHz
-  - 434.77 MHz
-  - 868.35 MHz
-  - 868.85 MHz
-  - 915.00 MHz
-  - Preserves and identifies non-standard custom frequencies automatically.
-- **HEX Key Editor**: Interactive text input to modify protocol transmission keys directly.
+---
+
+## 🎯 Overview
+
+Normally on the Flipper Zero, modifying captured Sub-GHz `.sub` files requires taking out the micro SD card, connecting it to a computer, and editing text files manually.
+
+**Sub-GHz Editor** brings direct, on-device inspection and modification of saved Sub-GHz transmission captures:
+1. Open any captured or saved `.sub` file stored on your SD card.
+2. Cycle through standard regional frequency presets or enter an arbitrary custom frequency with live hardware band validation.
+3. Edit protocol transmission keys in hexadecimal directly using an interactive text editor.
+4. Save modifications in-place or create a new backup copy (`_edit.sub`).
+
+---
+
+## ✨ Features
+
+- **File Browser Integration**:
+  - Direct file browser dialog to select any `.sub` file from `/ext/subghz`.
+  - Seamless file launcher integration: opens `.sub` files directly from Flipper's native File Manager.
+- **Standard Frequency Presets**:
+  - Instant cycling across all common Sub-GHz frequencies:
+    - `315.00 MHz`
+    - `318.00 MHz`
+    - `345.00 MHz`
+    - `390.00 MHz`
+    - `433.07 MHz`
+    - `433.88 MHz`
+    - `433.92 MHz`
+    - `434.42 MHz`
+    - `434.77 MHz`
+    - `868.35 MHz`
+    - `868.85 MHz`
+    - `915.00 MHz`
+- **Manual / Custom Frequency Input**:
+  - Enter arbitrary target frequencies (in Hz or MHz).
+  - Built-in hardware band verification adhering to CC1101 transceiver limits:
+    - `300 MHz – 348 MHz`
+    - `387 MHz – 464 MHz`
+    - `779 MHz – 928 MHz`
+- **HEX Key Code Editor**:
+  - Modify protocol keys directly with live hexadecimal validation.
 - **Safe Saving**:
-  - Overwrite current file while maintaining file header integrity.
-  - Save As Copy with `_edit.sub` suffix to prevent accidental loss of original captures.
-- **Haptic & Sound Feedback**: Vibro and acoustic notification on successful operations.
+  - **Overwrite**: Updates target file preserving header integrity and metadata.
+  - **Save As Copy**: Saves a copy with `_edit.sub` suffix to prevent accidental overwrite of original captures.
+- **Haptic & Acoustic Feedback**:
+  - Distinct vibro and sound notifications on successful saves or invalid input.
 
-## Architecture & Code Structure
+---
 
-The project strictly follows the Separation of Concerns principle:
-- `application.fam`: Application metadata and manifest.
-- `subghz_editor.png`: 10x10 monochrome application icon.
-- `subghz_editor_model.h`: Core data types, frequency tables, and application state models.
-- `subghz_editor_file.h` / `subghz_editor_file.c`: File loading, `FlipperFormat` parsing, and storage update logic.
-- `subghz_editor_view.h` / `subghz_editor_view.c`: GUI views (`VariableItemList`, `TextInput`, `Widget` status dialogs).
-- `subghz_editor.c`: Main application lifecycle, service record handles, and view dispatcher orchestrator.
+## 🎮 Navigation & Controls
 
-## Building & Installation
+| Screen / Item | Button | Action |
+|---|---|---|
+| **Main Menu (No file)** | `[OK]` on "Open .sub File" | Launch file browser dialog |
+| **Main Menu (No file)** | `[OK]` on "Help / About" | Show application info screen |
+| **Editor** | `[<] / [>]` on "Freq" | Cycle standard frequency presets |
+| **Editor** | `[OK]` on "Freq" | Open manual frequency input dialog |
+| **Editor** | `[OK]` on "Key" | Open hexadecimal key editor |
+| **Editor** | `[OK]` on "Save (Overwrite)" | Save changes to opened file |
+| **Editor** | `[OK]` on "Save As Copy" | Save new copy with `_edit.sub` suffix |
+| **Editor** | `[OK]` on "Close File" | Close current file and return to start |
+| **Any View** | `[Back]` | Return to previous view or exit |
 
-To build using `ufbt` (micro Flipper Build Tool):
+---
+
+## 🛠️ Building & Installing
+
+### Prerequisites
+Install `ufbt` (micro Flipper Build Tool):
 ```bash
-ufbt
+pip install ufbt
 ```
 
-To install directly to a connected Flipper Zero:
+### Build `.fap` Package
+```bash
+cd flipper-subghz-editor
+ufbt
+```
+The compiled package will be located at `dist/subghz_editor.fap`.
+
+### Install to Flipper Zero
+Connect your Flipper Zero via USB and run:
 ```bash
 ufbt launch
 ```
 
-Developed by Vazgen Grigoryan.
+---
+
+## ☕ Support & Donations
+
+If you find **Sub-GHz Editor** useful and would like to support future development, hardware experiments, and updates:
+
+- **Bitcoin (BTC)**: `bc1q7fu5pck45x2v03e6yyqzf2hexu598s58c8zczg`
+
+---
+
+## 📜 License
+
+MIT License. Created by Vazgen Grigoryan.
