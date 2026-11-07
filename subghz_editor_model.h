@@ -2,6 +2,7 @@
 
 #include <furi.h>
 #include <furi_hal.h>
+#include <furi_hal_subghz.h>
 #include <gui/gui.h>
 #include <gui/view_dispatcher.h>
 #include <gui/modules/variable_item_list.h>
@@ -40,6 +41,14 @@ static const SubGhzFreqPreset subghz_presets[] = {
 
 #define SUBGHZ_PRESETS_COUNT (sizeof(subghz_presets) / sizeof(SubGhzFreqPreset))
 
+typedef enum {
+    SubGhzEditorEventOpenFile = 100,
+    SubGhzEditorEventAbout,
+    SubGhzEditorEventSaveOverwrite,
+    SubGhzEditorEventSaveCopy,
+    SubGhzEditorEventCloseFile,
+} SubGhzEditorCustomEvent;
+
 typedef struct {
     FuriString* file_path;
     FuriString* file_name;
@@ -47,6 +56,7 @@ typedef struct {
     FuriString* preset_str;
     char key_buf[SUBGHZ_EDITOR_KEY_BUFFER_SIZE];
     char temp_key_buf[SUBGHZ_EDITOR_KEY_BUFFER_SIZE];
+    char freq_input_buf[32];
     char custom_freq_str[32];
     uint32_t frequency;
     uint32_t initial_frequency;
