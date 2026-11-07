@@ -434,3 +434,31 @@ void subghz_editor_view_init(SubGhzEditorApp* app) {
         app);
     subghz_editor_view_refresh_list(app);
 }
+
+void subghz_editor_show_about(SubGhzEditorApp* app) {
+    widget_reset(app->widget);
+    widget_add_text_scroll_element(
+        app->widget,
+        0,
+        0,
+        128,
+        64,
+        "\e#Sub-GHz Editor v1.1\e#\n"
+        "\e#Frequency & Key Editor\e#\n"
+        "-------------------\n"
+        "Features:\n"
+        "- Frequency Presets\n"
+        "- Manual CC1101 Input\n"
+        "- Hex Key Code Editor\n"
+        "- Direct .sub File Load\n"
+        "- Save & Save As Copy\n"
+        "-------------------\n"
+        "Author:\n"
+        "Vazgen Grigoryan (VG)\n"
+        "License: MIT\n"
+        "-------------------\n"
+        "GitHub Project:\n"
+        "vazgen3201/flipper-\n"
+        "subghz-editor\n");
+    view_dispatcher_switch_to_view(app->view_dispatcher, SubGhzEditorViewWidget);
+}
