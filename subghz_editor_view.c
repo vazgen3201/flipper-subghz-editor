@@ -236,6 +236,14 @@ static void subghz_editor_list_enter(void* context, uint32_t index) {
         view_dispatcher_send_custom_event(app->view_dispatcher, SubGhzEditorEventCloseFile);
         return;
     }
+    current_idx++;
+
+    // Help / About
+    if(index == current_idx) {
+        FURI_LOG_I(TAG, "Dispatching SubGhzEditorEventAbout");
+        view_dispatcher_send_custom_event(app->view_dispatcher, SubGhzEditorEventAbout);
+        return;
+    }
 }
 
 bool subghz_editor_custom_event_callback(void* context, uint32_t event) {
@@ -289,10 +297,7 @@ bool subghz_editor_custom_event_callback(void* context, uint32_t event) {
 
     case SubGhzEditorEventAbout: {
         FURI_LOG_I(TAG, "Showing About screen");
-        subghz_editor_show_message(
-            app,
-            "Sub-GHz Editor v1.1",
-            "1. Open saved .sub\n2. Cycle freq or press OK to edit\n3. Edit Key in HEX\n4. Save copy or overwrite\n\nBy Vazgen Grigoryan");
+        subghz_editor_show_about(app);
         return true;
     }
 
@@ -425,6 +430,9 @@ void subghz_editor_view_refresh_list(SubGhzEditorApp* app) {
 
     // 6: Close File
     variable_item_list_add(app->var_list, "Close File", 1, NULL, app);
+
+    // 7: Help / About
+    variable_item_list_add(app->var_list, "Help / About", 1, NULL, app);
 }
 
 void subghz_editor_view_init(SubGhzEditorApp* app) {
