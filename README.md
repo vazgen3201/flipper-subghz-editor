@@ -7,8 +7,9 @@
 </p>
 
 <p align="center">
-  <img src="screenshots/ui_screen.png" alt="Sub-GHz Editor UI Screen" width="380" />
-  <img src="screenshots/about_screen.png" alt="Sub-GHz Editor About Screen" width="380" />
+  <img src="screenshots/ui_screen_1.png" alt="Sub-GHz Editor Open File Screen" width="250" />
+  <img src="screenshots/ui_screen_2.png" alt="Sub-GHz Editor Frequency & Key Screen" width="250" />
+  <img src="screenshots/about_screen.png" alt="Sub-GHz Editor Scrollable About Screen" width="250" />
 </p>
 
 ---
