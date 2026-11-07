@@ -9,7 +9,8 @@ static bool subghz_editor_parse_frequency(const char* str, uint32_t* out_freq) {
     if(!str || !out_freq) return false;
 
     // Skip leading whitespaces
-    while(*str == ' ' || *str == '\t') str++;
+    while(*str == ' ' || *str == '\t')
+        str++;
     if(!*str) return false;
 
     // Check if decimal point/comma exists (e.g. 433.92, 433,92 MHz)
@@ -132,7 +133,11 @@ static void subghz_editor_text_input_done(void* context) {
 
 static void subghz_editor_list_enter(void* context, uint32_t index) {
     SubGhzEditorApp* app = (SubGhzEditorApp*)context;
-    FURI_LOG_I(TAG, "List item pressed: %lu (file_loaded=%d)", (unsigned long)index, app->model.is_file_loaded);
+    FURI_LOG_I(
+        TAG,
+        "List item pressed: %lu (file_loaded=%d)",
+        (unsigned long)index,
+        app->model.is_file_loaded);
 
     if(!app->model.is_file_loaded) {
         if(index == 0) {
@@ -192,7 +197,8 @@ static void subghz_editor_list_enter(void* context, uint32_t index) {
     if(app->model.has_key) {
         if(index == current_idx) {
             FURI_LOG_I(TAG, "Switching to TextInput for HEX key edit");
-            snprintf(app->model.temp_key_buf, sizeof(app->model.temp_key_buf), "%s", app->model.key_buf);
+            snprintf(
+                app->model.temp_key_buf, sizeof(app->model.temp_key_buf), "%s", app->model.key_buf);
             text_input_reset(app->text_input);
             text_input_set_header_text(app->text_input, "Edit Key (HEX):");
             text_input_set_result_callback(
@@ -252,13 +258,11 @@ bool subghz_editor_custom_event_callback(void* context, uint32_t event) {
 
     switch(event) {
     case SubGhzEditorEventOpenFile: {
-        FURI_LOG_I(TAG, "Opening file browser dialog at %s", furi_string_get_cstr(app->model.file_path));
+        FURI_LOG_I(
+            TAG, "Opening file browser dialog at %s", furi_string_get_cstr(app->model.file_path));
 
         DialogsFileBrowserOptions browser_options;
-        dialog_file_browser_set_basic_options(
-            &browser_options,
-            SUBGHZ_EDITOR_APP_EXTENSION,
-            NULL);
+        dialog_file_browser_set_basic_options(&browser_options, SUBGHZ_EDITOR_APP_EXTENSION, NULL);
         browser_options.base_path = SUBGHZ_EDITOR_APP_PATH_FOLDER;
         browser_options.hide_ext = false;
 
@@ -270,10 +274,7 @@ bool subghz_editor_custom_event_callback(void* context, uint32_t event) {
         }
 
         bool chosen = dialog_file_browser_show(
-            app->dialogs,
-            app->model.file_path,
-            preselected_path,
-            &browser_options);
+            app->dialogs, app->model.file_path, preselected_path, &browser_options);
 
         furi_string_free(preselected_path);
 
@@ -338,22 +339,9 @@ bool subghz_editor_custom_event_callback(void* context, uint32_t event) {
 
 void subghz_editor_show_message(SubGhzEditorApp* app, const char* title, const char* msg) {
     widget_reset(app->widget);
-    widget_add_string_element(
-        app->widget,
-        64,
-        8,
-        AlignCenter,
-        AlignTop,
-        FontPrimary,
-        title);
+    widget_add_string_element(app->widget, 64, 8, AlignCenter, AlignTop, FontPrimary, title);
     widget_add_string_multiline_element(
-        app->widget,
-        64,
-        24,
-        AlignCenter,
-        AlignTop,
-        FontSecondary,
-        msg);
+        app->widget, 64, 24, AlignCenter, AlignTop, FontSecondary, msg);
     view_dispatcher_switch_to_view(app->view_dispatcher, SubGhzEditorViewWidget);
 }
 
@@ -368,15 +356,8 @@ void subghz_editor_view_refresh_list(SubGhzEditorApp* app) {
     }
 
     // 0: File [Select another file]
-    VariableItem* file_item = variable_item_list_add(
-        app->var_list,
-        "File:",
-        1,
-        NULL,
-        app);
-    variable_item_set_current_value_text(
-        file_item,
-        furi_string_get_cstr(app->model.file_name));
+    VariableItem* file_item = variable_item_list_add(app->var_list, "File:", 1, NULL, app);
+    variable_item_set_current_value_text(file_item, furi_string_get_cstr(app->model.file_name));
 
     // 1: Frequency presets (Left/Right to cycle presets, OK to edit manually)
     uint8_t values_count = SUBGHZ_PRESETS_COUNT;
@@ -384,43 +365,28 @@ void subghz_editor_view_refresh_list(SubGhzEditorApp* app) {
         values_count = SUBGHZ_PRESETS_COUNT + 1;
     }
     VariableItem* freq_item = variable_item_list_add(
-        app->var_list,
-        "Freq:",
-        values_count,
-        subghz_editor_freq_change,
-        app);
+        app->var_list, "Freq:", values_count, subghz_editor_freq_change, app);
 
     variable_item_set_current_value_index(freq_item, app->model.current_freq_index);
     if(app->model.is_custom_freq && app->model.current_freq_index == 0) {
         variable_item_set_current_value_text(freq_item, app->model.custom_freq_str);
     } else {
-        uint8_t p_idx = app->model.is_custom_freq ? (app->model.current_freq_index - 1) : app->model.current_freq_index;
+        uint8_t p_idx = app->model.is_custom_freq ? (app->model.current_freq_index - 1) :
+                                                    app->model.current_freq_index;
         variable_item_set_current_value_text(freq_item, subghz_presets[p_idx].str);
     }
 
     // 2: Key (if available)
     if(app->model.has_key) {
-        VariableItem* key_item = variable_item_list_add(
-            app->var_list,
-            "Key:",
-            1,
-            NULL,
-            app);
+        VariableItem* key_item = variable_item_list_add(app->var_list, "Key:", 1, NULL, app);
         char key_preview[20];
         snprintf(key_preview, sizeof(key_preview), "%.16s", app->model.key_buf);
         variable_item_set_current_value_text(key_item, key_preview);
     }
 
     // 3: Protocol info (Read-only info)
-    VariableItem* proto_item = variable_item_list_add(
-        app->var_list,
-        "Proto:",
-        1,
-        NULL,
-        app);
-    variable_item_set_current_value_text(
-        proto_item,
-        furi_string_get_cstr(app->model.protocol));
+    VariableItem* proto_item = variable_item_list_add(app->var_list, "Proto:", 1, NULL, app);
+    variable_item_set_current_value_text(proto_item, furi_string_get_cstr(app->model.protocol));
 
     // 4: Save Overwrite
     variable_item_list_add(app->var_list, "Save (Overwrite)", 1, NULL, app);
@@ -436,10 +402,7 @@ void subghz_editor_view_refresh_list(SubGhzEditorApp* app) {
 }
 
 void subghz_editor_view_init(SubGhzEditorApp* app) {
-    variable_item_list_set_enter_callback(
-        app->var_list,
-        subghz_editor_list_enter,
-        app);
+    variable_item_list_set_enter_callback(app->var_list, subghz_editor_list_enter, app);
     subghz_editor_view_refresh_list(app);
 }
 

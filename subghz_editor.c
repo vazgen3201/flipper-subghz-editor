@@ -36,10 +36,7 @@ static SubGhzEditorApp* subghz_editor_app_alloc(void) {
 
     // Alloc Views
     app->view_dispatcher = view_dispatcher_alloc();
-    view_dispatcher_attach_to_gui(
-        app->view_dispatcher,
-        app->gui,
-        ViewDispatcherTypeFullscreen);
+    view_dispatcher_attach_to_gui(app->view_dispatcher, app->gui, ViewDispatcherTypeFullscreen);
 
     view_dispatcher_set_event_callback_context(app->view_dispatcher, app);
     view_dispatcher_set_custom_event_callback(
@@ -50,26 +47,17 @@ static SubGhzEditorApp* subghz_editor_app_alloc(void) {
     app->var_list = variable_item_list_alloc();
     View* var_list_view = variable_item_list_get_view(app->var_list);
     view_set_previous_callback(var_list_view, subghz_editor_nav_exit);
-    view_dispatcher_add_view(
-        app->view_dispatcher,
-        SubGhzEditorViewVariableList,
-        var_list_view);
+    view_dispatcher_add_view(app->view_dispatcher, SubGhzEditorViewVariableList, var_list_view);
 
     app->text_input = text_input_alloc();
     View* text_input_view = text_input_get_view(app->text_input);
     view_set_previous_callback(text_input_view, subghz_editor_nav_back_to_list);
-    view_dispatcher_add_view(
-        app->view_dispatcher,
-        SubGhzEditorViewTextInput,
-        text_input_view);
+    view_dispatcher_add_view(app->view_dispatcher, SubGhzEditorViewTextInput, text_input_view);
 
     app->widget = widget_alloc();
     View* widget_view = widget_get_view(app->widget);
     view_set_previous_callback(widget_view, subghz_editor_nav_back_to_list);
-    view_dispatcher_add_view(
-        app->view_dispatcher,
-        SubGhzEditorViewWidget,
-        widget_view);
+    view_dispatcher_add_view(app->view_dispatcher, SubGhzEditorViewWidget, widget_view);
 
     subghz_editor_view_init(app);
 

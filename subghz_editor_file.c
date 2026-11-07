@@ -130,11 +130,7 @@ bool subghz_editor_file_load(SubGhzEditorApp* app, const char* path) {
         if(flipper_format_read_string(fff, "Key", key_temp)) {
             const char* key_cstr = furi_string_get_cstr(key_temp);
             if(strlen(key_cstr) > 0) {
-                snprintf(
-                    app->model.key_buf,
-                    sizeof(app->model.key_buf),
-                    "%s",
-                    key_cstr);
+                snprintf(app->model.key_buf, sizeof(app->model.key_buf), "%s", key_cstr);
                 app->model.has_key = true;
                 FURI_LOG_I(TAG, "Key loaded: %s", app->model.key_buf);
             }
@@ -224,10 +220,7 @@ bool subghz_editor_file_save_copy(SubGhzEditorApp* app) {
     FURI_LOG_I(TAG, "Target copy path: %s", furi_string_get_cstr(dst_path));
 
     // Copy original file first to keep all headers and comments intact
-    FS_Error fs_res = storage_common_copy(
-        app->storage,
-        src_path,
-        furi_string_get_cstr(dst_path));
+    FS_Error fs_res = storage_common_copy(app->storage, src_path, furi_string_get_cstr(dst_path));
 
     bool success = false;
     if(fs_res == FSE_OK) {
